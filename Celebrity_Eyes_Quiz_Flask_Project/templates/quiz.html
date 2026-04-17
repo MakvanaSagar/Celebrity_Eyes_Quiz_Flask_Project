@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Celebrity Eyes Quiz</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            color: #0ff;
+            font-family: Arial;
+            text-align: center;
+        }
+
+        video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+
+        .card {
+            background: rgba(255, 255, 255, 0.05); /* Lighter transparency */
+            backdrop-filter: blur(15px); /* Blurs the background video */
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(0, 255, 255, 0.2); /* Thin cyan border */
+            max-width: 420px;
+            margin: 70px auto;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 255, 255, 0.37);
+        }
+
+        img {
+            width: 100%;
+            max-width: 250px;
+            border-radius: 12px;
+            margin: 15px 0;
+        }
+
+        label {
+            display: block;
+            margin: 8px;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px 25px;
+            background: #0ff;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+        }
+
+        /* Styling the radio options to look like buttons */
+.option-container {
+    display: block;
+    background: rgba(0, 255, 255, 0.1);
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.option-container:hover {
+    background: rgba(0, 255, 255, 0.2);
+    border: 1px solid #0ff;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+/* Make the Next button pulse slightly */
+button {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+    </style>
+
+    <script>
+        let time = 10;
+        function timer() {
+            document.getElementById("time").innerText = time;
+            time--;
+            if (time < 0) {
+                document.getElementById("quizForm").submit();
+            }
+        }
+        setInterval(timer, 1000);
+    </script>
+</head>
+
+<body>
+
+
+
+<video autoplay muted loop>
+    <source src="{{ url_for('static', filename='bg.mp4') }}" type="video/mp4">
+</video>
+
+<header style="padding: 20px; background: rgba(0,0,0,0.5); border-bottom: 1px solid #0ff;">
+    <h1 style="margin: 0; font-size: 24px; text-transform: uppercase; letter-spacing: 3px;">
+        ⚡ CRIC-EYE CHALLENGE ⚡
+    </h1>
+</header>
+
+<div class="card">
+    <div class="top">
+        <span>Q {{ qno }}/{{ total }}</span>
+        <span>⏱ <span id="time">10</span>s</span>
+        <span>Score: {{ score }}</span>
+    </div>
+
+    <h3>Level: {{ level }}</h3>
+
+    <form method="POST" id="quizForm">
+        <img src="{{ url_for('static', filename='eyes/' + q.image) }}">
+
+        {% for opt in q.options %}
+        <label class="option-container">
+            <input type="radio" name="answer" value="{{ opt }}">
+            {{ opt }}
+        </label>
+        {% endfor %}
+
+        <button type="submit">Next Question</button>
+    </form>
+</div>
+
+<footer style="position: fixed; bottom: 0; width: 100%; padding: 15px; background: rgba(0,0,0,0.8); font-size: 12px; border-top: 1px solid #0ff;">
+    <p>© 2024 Celebrity Eyes Quiz | Built with Flask & Python</p>
+    <div>
+        <a href="/" style="color: #0ff; text-decoration: none; margin: 0 10px;">Reset Game</a> | 
+        <span style="margin-left: 10px;">Identify the Indian Cricketer by their eyes!</span>
+    </div>
+</footer>
+
+
+
+</body>
+</html>
